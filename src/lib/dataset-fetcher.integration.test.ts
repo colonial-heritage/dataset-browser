@@ -60,3 +60,32 @@ describe('search', () => {
     });
   });
 });
+
+describe('getById', () => {
+  it('returns undefined if no dataset matches the ID', async () => {
+    const dataset = await datasetFetcher.getById({id: 'AnIdThatDoesNotExist'});
+
+    expect(dataset).toBeUndefined();
+  });
+
+  it('returns the dataset that matches the ID', async () => {
+    const dataset = await datasetFetcher.getById({
+      id: 'https://archive.example.org/datasets/7',
+    });
+
+    expect(dataset).toStrictEqual({
+      id: 'https://archive.example.org/datasets/7',
+      name: 'Dataset 7',
+      description:
+        'Maecenas quis sem ante. Vestibulum mattis lorem in mauris pulvinar tincidunt. Sed nisi ligula, mattis id vehicula at, faucibus vel quam.',
+      publisher: {
+        id: 'https://archive.example.org/',
+        name: 'Archive',
+      },
+      license: {
+        id: 'http://creativecommons.org/publicdomain/zero/1.0/',
+        name: 'Public Domain',
+      },
+    });
+  });
+});

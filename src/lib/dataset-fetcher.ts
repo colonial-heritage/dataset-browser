@@ -81,6 +81,12 @@ export type SearchResult = {
   datasets: Dataset[];
 };
 
+const getByIdOptionsSchema = z.object({
+  id: z.string(),
+});
+
+export type GetByIdOptions = z.infer<typeof getByIdOptionsSchema>;
+
 export class DatasetFetcher {
   private endpointUrl: string;
 
@@ -181,5 +187,29 @@ export class DatasetFetcher {
     };
 
     return searchResult;
+  }
+
+  async getById(options: GetByIdOptions): Promise<Dataset | undefined> {
+    const opts = getByIdOptionsSchema.parse(options);
+
+    // TBD: can we use Elastic's Document API instead? Or should we query the triplestore?
+    const searchParams = {
+      query: {
+        term: {
+          '@id.keyword': opts.id,
+        },
+      },
+    };
+
+    const searchResponse = await this.makeSearchRequest(searchParams);
+
+    if (searchResponse.data.hits.hits.length !== 1) {
+      return undefined;
+    }
+
+    const rawDataset = searchResponse.data.hits.hits[0]._source;
+    const dataset = this.fromRawDatasetToDataset(rawDataset);
+
+    return dataset;
   }
 }
