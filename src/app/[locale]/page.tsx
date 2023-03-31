@@ -19,11 +19,12 @@ export default async function Home({searchParams}: Props) {
     sortOrder: searchOptions.sortOrder,
   });
 
-  let hasError, searchResult;
+  let hasError, searchResult, errorMessage;
   try {
     searchResult = await datasetFetcher.search(searchOptions);
   } catch (error) {
     hasError = true;
+    errorMessage = error;
     console.error(error);
   }
   const locale = useLocale();
@@ -46,6 +47,9 @@ export default async function Home({searchParams}: Props) {
             data-testid="fetch-error"
           >
             <p>{t('fetchError')}</p>
+            <p>
+              <pre>{JSON.stringify(errorMessage, null, 2)}</pre>
+            </p>
           </div>
         )}
 
