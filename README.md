@@ -1,5 +1,5 @@
 > **Warning**
-> This project is archived. The Dataset Browser is moved to the [Colonial Collections monorepo](https://github.com/colonial-heritage/dataset-browser).
+> This project is archived. The Dataset Browser is moved to the [Colonial Collections monorepo](https://github.com/colonial-heritage/colonial-collections).
 
 # Dataset Browser
 
